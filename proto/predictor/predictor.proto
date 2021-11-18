@@ -1,0 +1,21 @@
+syntax = "proto3";
+package predictor;
+option go_package = "./proto/predictor/;predictor";
+// The greeting service definition.
+service Predictor {
+  // Sends a greeting
+  rpc PredictMatch (PredictMatchRequest) returns (PredictMatchResponse) {}
+}
+
+// The request message containing the user's name.
+message PredictMatchRequest{
+  string blueTeam = 1;
+  string redTeam = 2;
+  int32 year = 3;
+}
+
+// The response message containing the greetings
+message PredictMatchResponse{
+  string winnerTeam = 1;
+  float winningPercentage = 2;
+}
