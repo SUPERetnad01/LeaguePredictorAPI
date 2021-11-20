@@ -1,11 +1,10 @@
 package main
 
 import (
-	//pb "LeaugeProdictorAPI/server/proto/predictor"
-	pb "github.com/SUPERetnad01/LeaguePro"
 	"context"
 	"encoding/json"
 	"fmt"
+	pb "github.com/SUPERetnad01/LeaguePredictorAPI/proto/predictor"
 	"github.com/gorilla/mux"
 	"google.golang.org/grpc"
 	"log"
@@ -13,7 +12,7 @@ import (
 	"time"
 )
 const(
-	address = "localhost:50051"
+	address = "predictor:50051"
 	defaultName = "world"
 	blueTeam = "100"
 	redTeam = "C9"
@@ -21,6 +20,7 @@ const(
 )
 
 func PredictMatch(resp http.ResponseWriter,req *http.Request){
+	print("getting match \n")
 	var request pb.PredictMatchRequest
 	decoder := json.NewDecoder(req.Body)
 	if err := decoder.Decode(&request); err != nil {
@@ -43,7 +43,6 @@ func PredictMatch(resp http.ResponseWriter,req *http.Request){
 		log.Fatalf("could not greet %v",err)
 	}
 	defer req.Body.Close()
-	print("pizza Time")
 	respondWithJSON(resp,http.StatusOK,&response)
 
 }
@@ -63,12 +62,11 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 func main() {
 	fmt.Println("Starting the API server...")
 	r := mux.NewRouter()
-	//r.HandleFunc("/echo", Echo).Methods("POST")
 	r.HandleFunc("/predictMatch",PredictMatch).Methods("POST")
 
 	server := &http.Server{
 		Handler:      r,
-		Addr:         "0.0.0.0:8080",
+		Addr:         ":8080",
 		WriteTimeout: 2 * time.Minute,
 		ReadTimeout:  2 * time.Minute,
 	}
